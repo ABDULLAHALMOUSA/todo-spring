@@ -7,15 +7,21 @@ import org.springframework.web.server.ResponseStatusException
 import javax.persistence.*
 
 @Entity(name = "users")
-@JsonIgnoreProperties("hibernateLazyInitializer", "handler")
+@JsonIgnoreProperties("hibernateLazyInitializer", "handler", "password")
 data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long,
+    val id: Long? = null,
     @Column(name = "username", unique = true)
     val username: String?,
     @Column(name = "password")
     val password: String?,
     @Column(name = "enabled")
     val enabled: Boolean = true
+)
+
+
+data class UserRegistration(
+    val username: String? = null,
+    val password: String? = null
 )

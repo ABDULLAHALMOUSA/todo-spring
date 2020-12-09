@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import space.ibrahim.todo.models.User
+import space.ibrahim.todo.models.UserRegistration
 import space.ibrahim.todo.repositories.UserRepository
 
 @Service
@@ -16,8 +17,8 @@ class UserService() {
     @Autowired
     private lateinit var bcrypt: PasswordEncoder
 
-    fun createUser(user: User): User {
-        if (user.username == null || user.password == null) {
+    fun createUser(user: UserRegistration): User {
+        if (user.username.isNullOrBlank() || user.password.isNullOrBlank()) {
             throw MissingRequiredPropertiesException()
         }
 
@@ -25,7 +26,11 @@ class UserService() {
 
         if (existingUser != null) throw UserAlreadyExistsException()
 
-        return userRepository.saveAndFlush(user.copy(password = bcrypt.encode(user.password)))
+        val newUser = User(
+            username = user.username,
+            password = bcrypt.encode(user.password)
+        )
+        return userRepository.saveAndFlush(newUser)
     }
 
     fun findUserByUsername(username: String?): User? {

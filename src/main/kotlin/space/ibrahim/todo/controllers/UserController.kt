@@ -3,11 +3,12 @@ package space.ibrahim.todo.controllers
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.MissingRequiredPropertiesException
 import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
-import space.ibrahim.todo.models.User
+import space.ibrahim.todo.models.UserRegistration
 import space.ibrahim.todo.services.UserAlreadyExistsException
 import space.ibrahim.todo.services.UserService
 
@@ -18,8 +19,8 @@ class UserController {
     @Autowired
     private lateinit var userService: UserService
 
-    @PostMapping
-    fun createUser(@RequestBody user: User): ResponseEntity<Any> =
+    @PostMapping(consumes = [MediaType.APPLICATION_FORM_URLENCODED_VALUE])
+    fun createUser(@ModelAttribute user: UserRegistration): ResponseEntity<Any> =
         try {
             ResponseEntity.status(HttpStatus.CREATED).body(userService.createUser(user))
         } catch (e: UserAlreadyExistsException) {
@@ -33,6 +34,4 @@ class UserController {
         val authentication: Authentication = SecurityContextHolder.getContext().authentication
         return ResponseEntity.ok().body(userService.findUserByUsername(authentication.name))
     }
-
-
 }
