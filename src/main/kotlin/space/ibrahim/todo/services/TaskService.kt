@@ -7,8 +7,7 @@ import space.ibrahim.todo.models.Task
 import space.ibrahim.todo.models.TaskDto
 import space.ibrahim.todo.repositories.TaskRepository
 import space.ibrahim.todo.repositories.UserRepository
-import java.lang.RuntimeException
-import javax.transaction.Transactional
+import javax.persistence.EntityNotFoundException
 
 @Service
 class TaskService {
@@ -51,7 +50,7 @@ class TaskService {
         val user = userRepository.getByUsernameEquals(username)
             ?: throw UsernameNotFoundException("username not found")
 
-        val task = taskRepository.getByUserEqualsAndIdEquals(user, id) ?: throw TaskDoesNotExist()
+        val task = taskRepository.getByUserEqualsAndIdEquals(user, id) ?: throw EntityNotFoundException()
 
         return mapTaskToTaskDto(task)
     }
@@ -64,7 +63,7 @@ class TaskService {
 
         val deletedTaskId = taskRepository.deleteTaskByUserEqualsAndIdEquals(user, id)
 
-        if (deletedTaskId <= 0) throw TaskDoesNotExist()
+        if (deletedTaskId <= 0) throw EntityNotFoundException()
     }
 
     fun updateTask(username: String?, taskDto: TaskDto, id: Long): TaskDto {
@@ -72,7 +71,7 @@ class TaskService {
 
         val user = userRepository.getByUsernameEquals(username)
             ?: throw UsernameNotFoundException("username not found")
-        val task = taskRepository.getByUserEqualsAndIdEquals(user, id) ?: throw TaskDoesNotExist()
+        val task = taskRepository.getByUserEqualsAndIdEquals(user, id) ?: throw EntityNotFoundException()
 
         return mapTaskToTaskDto(
             taskRepository.saveAndFlush(
@@ -93,5 +92,3 @@ class TaskService {
     )
 }
 
-
-class TaskDoesNotExist(message: String = "Task does not exist") : RuntimeException(message)
