@@ -6,7 +6,7 @@ import java.time.LocalDateTime
 
 class ApiError(
     val status: HttpStatus,
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyyThh:mm:ss")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     val timestamp: LocalDateTime = LocalDateTime.now(),
     val message: String = "Unexpected Error",
 )
