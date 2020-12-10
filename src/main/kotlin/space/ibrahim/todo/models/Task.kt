@@ -5,6 +5,7 @@ import java.sql.Date
 import java.time.LocalDateTime
 import javax.persistence.*
 
+//TODO: Add validation on models
 @Entity(name = "tasks")
 @JsonIgnoreProperties("hibernateLazyInitializer", "handler")
 data class Task(

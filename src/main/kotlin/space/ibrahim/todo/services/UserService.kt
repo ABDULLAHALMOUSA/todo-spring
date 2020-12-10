@@ -2,6 +2,7 @@ package space.ibrahim.todo.services
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.core.env.MissingRequiredPropertiesException
+import org.springframework.http.converter.HttpMessageNotReadableException
 import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 import space.ibrahim.todo.exceptions.UserAlreadyExistsException
@@ -20,7 +21,7 @@ class UserService() {
 
     fun createUser(user: UserRegistration): User {
         if (user.username.isNullOrBlank() || user.password.isNullOrBlank()) {
-            throw MissingRequiredPropertiesException()
+            throw HttpMessageNotReadableException("Malformed request")
         }
 
         val existingUser: User? = userRepository.getByUsernameEquals(username = user.username)

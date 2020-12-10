@@ -8,6 +8,7 @@ import org.springframework.security.config.http.SessionCreationPolicy
 
 @Configuration
 class WebSecurityConfiguration : WebSecurityConfigurerAdapter() {
+    //TODO: use a better auth mechanism
     override fun configure(http: HttpSecurity) {
         http.csrf().disable()
             .httpBasic()

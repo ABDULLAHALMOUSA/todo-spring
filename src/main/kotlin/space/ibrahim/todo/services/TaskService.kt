@@ -29,7 +29,7 @@ class TaskService {
         else taskRepository.getByUserEquals(user).map { mapTaskToTaskDto(it) }
     }
 
-    fun addTask(taskDto: TaskDto, username: String?): Task {
+    fun addTask(taskDto: TaskDto, username: String?): TaskDto {
         if (username == null) throw UsernameNotFoundException("username not found")
         val user = userRepository.getByUsernameEquals(username)
             ?: throw UsernameNotFoundException("username not found")
@@ -41,7 +41,7 @@ class TaskService {
             user = user
         )
 
-        return taskRepository.saveAndFlush(task)
+        return mapTaskToTaskDto(taskRepository.saveAndFlush(task))
     }
 
     fun getTask(username: String?, id: Long): TaskDto {

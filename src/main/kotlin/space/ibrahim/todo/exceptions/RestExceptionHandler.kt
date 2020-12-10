@@ -53,7 +53,7 @@ class RestExceptionHandler : ResponseEntityExceptionHandler() {
         status: HttpStatus,
         request: WebRequest
     ): ResponseEntity<Any> {
-        val error = "Malformed JSON request"
+        val error = "Malformed request, please enter all required parameters"
         return buildResponseEntity(
             apiError = ApiError(
                 status = HttpStatus.BAD_REQUEST,
